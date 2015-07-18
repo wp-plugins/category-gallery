@@ -1,9 +1,9 @@
 === Category Gallery ===
 Contributors: mrcapture
 Tags: Category Gallery
-Requires at least: WordPress 4.0.1
+Requires at least: 4.0.1
 Donate link: www.ermanseneren.com/donate
-Tested up to: WordPress 4.2.2.
+Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
