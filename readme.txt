@@ -42,3 +42,5 @@ Note: This plugin is fully compatible with WP Media Category Management or other
 = v1.0 =
 * Shortcode generator has been added to the settings on admin panel.
 * In-theme-appereance has been enhanced.
+= v1.1 =
+* Bugs fixed.

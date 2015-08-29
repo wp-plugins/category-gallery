@@ -3,7 +3,7 @@
 Plugin Name: Category Gallery
 Plugin URI: www.ermanseneren.com/categorygallery/
 Description: Prepare WP categorized image galleries including more than 500 photos with preloader techique without decreasing initial page loading performance.  
-Version: Version (1.0)
+Version: Version (1.1)
 Author: Erman Şeneren
 Author URI: www.ermanseneren.com
 License: GNU
@@ -215,7 +215,10 @@ function categorygallery_fonks() {
   </div>
   <div id="tabs2">
   <?php
-  $categories=get_categories('type=attachment'); 
+  global $wpdb;
+  $query1 = "SELECT * FROM {$wpdb->terms} where term_id in (SELECT term_taxonomy_id from {$wpdb->term_relationships} where object_id in (SELECT ID from {$wpdb->posts} where post_type = 'attachment') )";
+  $categories = $wpdb->get_results($query1);
+  //$categories=get_categories('type=attachment'); 
 		if  ($categories) {
   ?>
     <select id="taxon" onChange="kisakodolustur($(this));">
