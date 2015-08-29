@@ -3,7 +3,7 @@
 Plugin Name: Category Gallery
 Plugin URI: www.ermanseneren.com/categorygallery/
 Description: Prepare WP categorized image galleries including more than 500 photos with preloader techique without decreasing initial page loading performance.  
-Version: Version (0.5)
+Version: Version (1.0)
 Author: Erman Şeneren
 Author URI: www.ermanseneren.com
 License: GNU
@@ -52,7 +52,7 @@ function show_catgal_01($atts){
             height: 500px; width: 100%; text-align: center; overflow:hidden;
 		}
 		.kSlideshowWrapper, .kSlideshowItemDiv{
-				width: 100%;
+				width: 98%;
 				height: 400px;
 				overflow:hidden; 
 		}
@@ -108,7 +108,7 @@ function show_catgal_01($atts){
 	 window.onload = function() {
 		var $ = jQuery;
      	eval( ".categoryImages($cat_id)." );
-		if('".get_cat_name($cat_id)."' != '') $('#galeriBaslik').html('".get_cat_name($cat_id)."');
+		if('".get_category($cat_id)->name."' != '') $('#galeriBaslik').html('".get_category($cat_id)->name."');
 		$(\".kSlideshowTitle\").hide(0);
 	 };
      </script>
@@ -185,19 +185,91 @@ function categorygallery_fonks() {
 }
 
 ?> </div>
+<style>
+	#tabs ul { margin:0px; }
+	#tabs ul li {float:left; width:200px; border:#C3C0C0 1px solid; background-color:#FFF8F8; height:20px;padding:15px; font-weight:bold; cursor:pointer;}
+	.secilitab { background-color:#DCDBDB !important;}
+	#tabs div {float:none; padding:10px; border-top:#c2c2c2 1px solid;}
+</style>
 <div style="margin-top:10px;">
 <h2>Category Gallery Management</h2>
-<form method="post" action="">
-<table border="0" cellspacing="0" cellpadding="0">
-<tbody>
-<tr><td><label for="catgal_interval">Image Refresh Time (ms)</label></td><td> &nbsp; : <input type="text" id="catgal_interval" name="catgal_interval" value="<?php echo get_option('catgal_interval'); ?>" /></td></tr>
-<tr><td><label for="catgal_otoplay">Auto Play</label></td><td> &nbsp; : <select id="catgal_otoplay" name="catgal_otoplay"><option <?php if(get_option('catgal_otoplay')=="true") echo "selected"  ?> value="true">Enable</option><option <?php if(get_option('catgal_otoplay')!="true") echo "selected"  ?> value="false">Disable</option></select></td></tr>
-<tr><td><label for="catgal_enableTitle">Enable Title</label></td><td> &nbsp; : <select id="catgal_enableTitle" name="catgal_enableTitle"><option <?php if(get_option('catgal_enableTitle')=="true") echo "selected"  ?> value="true">Enable</option><option <?php if(get_option('catgal_enableTitle')!="true") echo "selected"  ?> value="false">Disable</option></select></td></tr>
-<tr><td><label for="catgal_enableControls">Enable Controls</label></td><td> &nbsp; : <select id="catgal_enableControls" name="catgal_enableControls"><option <?php if(get_option('catgal_enableControls')=="true") echo "selected"  ?> value="true">Enable</option><option <?php if(get_option('catgal_enableControls')!="true") echo "selected"  ?> value="false">Disable</option></select></td></tr>
-</tbody></table>
-<input type="hidden" id="gizli" name="gizli" value="asdq2wdasf3r"/><br /><br />
-<input type="submit" id="submit" name="submit" value="<?php _e('Save Changes'); ?>">
-</form>
-Example : [CATGAL cat_id=6]
+
+<div id="tabs">
+  <ul>
+    <li id="tabli1" onClick="tabch(0);" class="secilitab">Default Settings</li>
+    <li id="tabli2" onClick="tabch(1);">Short Code Generator</li>
+  </ul><br /><br /><br /><br />
+  <div id="tabs1">
+    <form method="post" action="">
+	<table border="0" cellspacing="0" cellpadding="0">
+	<tbody>
+	<tr><td><label for="catgal_interval">Image Refresh Time (ms)</label></td><td> &nbsp; : <input type="text" id="catgal_interval" name="catgal_interval" value="<?php echo get_option('catgal_interval'); ?>" /></td></tr>
+	<tr><td><label for="catgal_otoplay">Auto Play</label></td><td> &nbsp; : <select id="catgal_otoplay" name="catgal_otoplay"><option <?php if(get_option('catgal_otoplay')=="true") echo "selected"  ?> value="true">Enable</option><option <?php if(get_option('catgal_otoplay')!="true") echo "selected"  ?> value="false">Disable</option></select></td></tr>
+	<tr><td><label for="catgal_enableTitle">Enable Title</label></td><td> &nbsp; : <select id="catgal_enableTitle" name="catgal_enableTitle"><option <?php if(get_option('catgal_enableTitle')=="true") echo "selected"  ?> value="true">Enable</option><option <?php if(get_option('catgal_enableTitle')!="true") echo "selected"  ?> value="false">Disable</option></select></td></tr>
+	<tr><td><label for="catgal_enableControls">Enable Controls</label></td><td> &nbsp; : <select id="catgal_enableControls" name="catgal_enableControls"><option <?php if(get_option('catgal_enableControls')=="true") echo "selected"  ?> value="true">Enable</option><option <?php if(get_option('catgal_enableControls')!="true") echo "selected"  ?> value="false">Disable</option></select></td></tr>
+	</tbody></table>
+	<input type="hidden" id="gizli" name="gizli" value="asdq2wdasf3r"/><br /><br />
+	<input type="submit" id="submit" name="submit" value="<?php _e('Save Changes'); ?>">
+ </form>
+  </div>
+  </div>
+  <div id="tabs2">
+  <?php
+  $categories=get_categories('type=attachment'); 
+		if  ($categories) {
+  ?>
+    <select id="taxon" onChange="kisakodolustur($(this));">
+    	<option>Choose</option>
+        <?php
+		
+		  foreach ($categories  as $categoriesl ) {
+			echo ('<option value="'.$categoriesl->term_id.'">'.$categoriesl->name.'</option>');
+		  }
+		
+    ?>
+    </select><label for="taxon">Choose your media category for your gallery, shortcode will be generated automatically. </label><br />
+    <input type="text" value="" id="codeshort" /><label id="codetext" for="codeshort">&nbsp;</label>
+    <?php
+	} 
+		else{
+			echo ('<span style="color:red;">You do not have any categorized media.</span>');
+		}
+		
+		if (!is_plugin_active( 'wp-media-category-management/wp-media-category-management.php' ) ) {
+			$plugin_name = 'WP-Media-Category-Management';
+$install_link = '<a href="' . esc_url( network_admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin_name . '&TB_iframe=true&width=600&height=550' ) ) . '" class="thickbox" title="More info about ' . $plugin_name . '">Install ' . $plugin_name . '</a>';
+			echo ('<div style="padding:10px; border:#0000ff 1px solid; background-color:#00ffff; margin:20px;">You can experince WP-Media-Category plugin that is tested to organize media categories.<br />'.$install_link.'</div>');
+		}
+	?>
+    <script>
+	document.getElementById('codeshort').value='';
+	function kisakodolustur(objects){
+		$('#codeshort').val('[CATGAL cat_id='+ objects.val() +']');
+		$('#codetext').html('Please copy the generated code and paste it to your content.');
+	}
+    	
+    </script>
+  </div>
+</div>
+  <script>
+    var $ = jQuery;
+	$( "#tabs2" ).hide();
+	function tabch(tabnum){
+		switch(tabnum){
+		case 0:
+			$( "#tabs2" ).hide();
+			$( "#tabli2" ).removeClass('secilitab');
+			$( "#tabs1" ).show();
+			$( "#tabli1" ).addClass('secilitab');
+		break;
+		case 1:
+			$( "#tabs1" ).hide();
+			$( "#tabli1" ).removeClass('secilitab');
+			$( "#tabs2" ).show();
+			$( "#tabli2" ).addClass('secilitab');
+		break;
+		}
+	}
+  </script>
 </div>
 <?php } ?>

@@ -10,8 +10,8 @@
 		
 	}
 	.kSlideshowPrev{
-		width: 128px;
-		height: 128px;
+		width: 58px;
+		height: 58px;
 		cursor: pointer;		
 		position: absolute;
 		top: 30%;
@@ -35,8 +35,8 @@
 		background: url(../i/gtk-media-pause.png) no-repeat;
 	}
 	.kSlideshowNext{
-		width: 128px;
-		height: 128px;
+		width: 58px;
+		height: 58px;
 		cursor: pointer;		
 		position: absolute;
 		top: 30%;	
